@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Sergio Uncos (Terminal Cards)</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* Apply base font & background */
+        body {
+            font-family: 'Inter', sans-serif; /* Default to Inter */
+            background-color: #0a0a0a; /* Near black background */
+            color: #e5e7eb; /* Default text color (gray-200) */
+            overflow-x: hidden;
+        }
+        .font-mono { font-family: 'Roboto Mono', monospace; } /* Utility for mono */
+
+        /* Canvas and Wrapper Styles */
+        #particle-canvas {
+            position: fixed; /* Position behind everything */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all other content */
+            display: block; /* Ensure it's a block element */
+        }
+        .main-content-wrapper {
+            position: relative; /* Establishes stacking context */
+            z-index: 1; /* Ensure content is above canvas (z-index: -1) */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content-wrapper > main {
+            flex-grow: 1; /* Allow main content to fill space */
+        }
+
+        /* Header Styling */
+        header { 
+            background-color: rgba(10, 10, 10, 0.85); 
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px); 
+            border-bottom: 1px solid rgba(50, 255, 50, 0.1); 
+        }
+        header nav a:hover { color: #34d399; }
+        header nav a.active-link { color: #34d399; font-weight: 600; }
+        #mobileNav { background-color: rgba(10, 10, 10, 0.95); }
+        #mobileNav a { color: #cbd5e1; }
+        #mobileNav a:hover { color: #34d399; }
+        #mobileNav a.active-link { color: #34d399; font-weight: 600; }
+
+        /* Page Title */
+        .page-title { 
+            color: #f0fdf4; 
+            text-shadow: 0 0 5px rgba(50, 255, 50, 0.3); 
+            letter-spacing: 0.1em; 
+        }
+
+        /* Main Content Styling */
+        .about-paragraph {
+             color: #cbd5e1; /* Light gray (slate-300) */
+             line-height: 1.7;
+             margin-bottom: 1rem; /* Space between paragraphs */
+        }
+         .about-paragraph:last-child {
+             margin-bottom: 0;
+        }
+
+        /* Terminal Card Styling */
+        .terminal-card {
+            background-color: rgba(15, 23, 42, 0.7); /* Dark blue-gray (slate-900 / 70%) */
+            border: 1px solid rgba(50, 255, 50, 0.2); /* Green border */
+            border-radius: 4px; /* Slightly less rounded */
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .terminal-card:hover {
+            border-color: rgba(50, 255, 50, 0.5);
+            box-shadow: 0 0 15px rgba(50, 255, 50, 0.15);
+        }
+
+        .terminal-card-title {
+            color: #6ee7b7; /* Lighter Green */
+            border-bottom: 1px dashed rgba(50, 255, 50, 0.2); /* Dashed separator */
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-card-title i { /* Style FA icons */
+            margin-right: 0.75rem; /* Space after icon */
+            width: 20px; /* Fixed width */
+            height: 20px; /* Ensure height consistency */
+            text-align: center;
+            color: #34d399; /* Icon color */
+            flex-shrink: 0; /* Prevent icon from shrinking */
+            font-size: 1.1em; /* Adjust icon size if needed */
+        }
+
+        .terminal-card ul { /* List */
+            list-style: none;
+            padding-left: 0; /* Reset padding */
+            flex-grow: 1;
+        }
+
+        .terminal-card ul li {
+            padding-left: 0.5rem; /* Add small indent for list items */
+            margin-bottom: 0.75rem;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .terminal-card .book-author {
+            color: #94a3b8; /* slate-400 */
+            font-size: 0.85rem;
+            margin-left: 5px;
+            font-style: italic;
+        }
+
+        .terminal-card .language-level {
+            color: #94a3b8; /* slate-400 */
+            font-size: 0.85rem;
+            margin-left: 5px;
+        }
+
+        footer {
+            background-color: rgba(10, 10, 10, 0.9);
+            border-top: 1px solid rgba(50, 255, 50, 0.1);
+            color: #6b7280;
+            margin-top: auto;
+        }
+
+        /* === Animations === */
+        .fade-in-element {
+            opacity: 0;
+            animation: fadeInAnimation 0.8s ease-out forwards;
+        }
+        @keyframes fadeInAnimation {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="main-content-wrapper">
+
+        <header class="text-white p-4 fixed w-full top-0 z-50 shadow-md fade-in-element">
+             <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-xl font-bold font-mono">Sergio Uncos</h1>
+                <nav id="desktopNav" class="hidden md:block">
+                    <ul class="flex space-x-6 font-mono text-sm">
+                        <li><a href="index.html" class="transition">Home</a></li>
+                        <li><a href="intro.html" class="transition">Intro</a></li>
+                        <li><a href="experience.html" class="transition">Experience</a></li>
+                        <li><a href="about.html" class="active-link transition">About</a></li>
+                        <li><a href="tools.html" class="transition">Tools</a></li>
+                        <li><a href="contact.html" class="transition">Contact</a></li>
+                    </ul>
+                </nav>
+                <button id="menuBtn" class="md:hidden text-white" aria-label="Open menu">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            <nav id="mobileNav" class="hidden md:hidden">
+                <ul class="flex flex-col space-y-4 p-4 font-mono">
+                     <li><a href="index.html" class="block hover:text-green-400">Home</a></li>
+                     <li><a href="intro.html" class="block hover:text-green-400">Intro</a></li>
+                     <li><a href="experience.html" class="block hover:text-green-400">Experience</a></li>
+                     <li><a href="about.html" class="block active-link">About</a></li>
+                     <li><a href="tools.html" class="block hover:text-green-400">Tools</a></li>
+                     <li><a href="contact.html" class="block hover:text-green-400">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="pt-20">
+            <section class="pt-8 pb-16 md:pb-20">
+                <div class="container mx-auto px-6 md:px-12 lg:px-20">
+
+                    <h3 class="font-mono text-3xl md:text-4xl font-bold text-center mb-12 page-title fade-in-element" style="animation-delay: 0.1s;">
+                        About Me
+                    </h3>
+
+                    <div class="terminal-card mb-12 max-w-4xl mx-auto fade-in-element" style="animation-delay: 0.3s;">
+                        <h5 class="terminal-card-title font-mono text-xl">
+                            <i class="fa-regular fa-user mr-3"></i>
+                            Summary
+                        </h5>
+                        <div class="font-inter">
+                            <p class="about-paragraph">
+                                I have a strong passion for assisting others to achieve their goals and offering support and coaching. My devotion to learning allowed me to become fluent in English, Portuguese, and Spanish.
+                            </p>
+                             <p class="about-paragraph">
+                                I consider myself a knowledge seeker and explorer. Here are some recommended books that have helped me:
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-16">
+
+                        <div class="terminal-card fade-in-element" style="animation-delay: 0.5s;">
+                            <h5 class="terminal-card-title font-mono text-xl">
+                                <i class="fa-solid fa-language"></i><span id="language-title-text">Languages</span>
+                            </h5>
+                            <ul class="font-mono">
+                                <li><span>English <span class="language-level font-inter">(Fluent - C1)</span></span></li>
+                                <li><span>Portuguese <span class="language-level font-inter">(Fluent)</span></span></li>
+                                <li><span>Spanish <span class="language-level font-inter">(Native)</span></span></li>
+                            </ul>
+                        </div>
+
+                        <div class="terminal-card fade-in-element" style="animation-delay: 0.7s;">
+                             <h5 class="terminal-card-title font-mono text-xl">
+                                <i class="fa-solid fa-book-open-reader"></i>
+                                Reading List
+                             </h5>
+                             <ul class="font-mono">
+                                <li><span>Atomic Habits<span class="book-author font-inter">- James Clear</span></span></li>
+                                <li><span>The Power of Habits<span class="book-author font-inter">- Charles Duhigg</span></span></li>
+                                <li><span>Make Your Bed<span class="book-author font-inter">- William H. McRaven</span></span></li>
+                                <li><span>Deep Work<span class="book-author font-inter">- Cal Newport</span></span></li>
+                                <li><span>The Four Agreements<span class="book-author font-inter">- Don Miguel Ruiz</span></span></li>
+                                <li><span>The Life-Changing Magic of Tidying Up<span class="book-author font-inter">- Marie Kondo</span></span></li>
+                                <li><span>Limitless<span class="book-author font-inter">- Jim Kwik</span></span></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- Recognitions Section -->
+                    <div class="terminal-card mb-12 max-w-4xl mx-auto mt-8 fade-in-element" style="animation-delay: 1.0s;">
+                        <h5 class="terminal-card-title font-mono text-xl">
+                            <i class="fa-solid fa-trophy mr-3"></i>
+                            Recognitions
+                        </h5>
+                        <ul class="font-mono">
+                            <li class="flex items-center"><i class="fa-brands fa-aws text-yellow-400 mr-3 text-xl"></i><span class="font-semibold text-gray-100">AWS Certified Cloud Practitioner</span></li>
+                            <li class="flex items-center"><i class="fas fa-chalkboard-teacher text-blue-400 mr-3 text-xl"></i><span class="font-semibold text-gray-100">Open Source Vulnerability Management Lecture</span> (Lecture/Presentation)</li>
+                            <li class="flex items-center"><i class="fas fa-language text-green-400 mr-3 text-xl"></i><span class="font-semibold text-gray-100">C1 English Level</span> (Certification/Level)</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <footer class="py-6 text-center fade-in-element" style="animation-delay: 0.9s;">
+            <div class="container mx-auto">
+                <p class="font-mono text-sm">&copy; <span id="current-year"></span> Sergio Uncos. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </div> 
+
+    <script src="js/particle-effect.js" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const btn = document.getElementById('menuBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            if (btn && mobileNav) {
+                btn.addEventListener('click', () => {
+                    mobileNav.classList.toggle('hidden');
+                });
+            }
+
+            // Set current year in footer
+            const currentYearSpan = document.getElementById('current-year');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            // Language Title Switching Logic
+            const langTitleElement = document.getElementById('language-title-text');
+            if (langTitleElement) {
+                const languages = ['Languages', 'Idiomas', 'Idiomas']; // English, Spanish, Portuguese
+                let currentLangIndex = 0;
+                const switchInterval = 2500; // ms (2.5 seconds)
+
+                setInterval(() => {
+                    currentLangIndex = (currentLangIndex + 1) % languages.length;
+                    langTitleElement.textContent = languages[currentLangIndex];
+                }, switchInterval);
+            }
+
+        });
+    </script>
+</body>
+</html>

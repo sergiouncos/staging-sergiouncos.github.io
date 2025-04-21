@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sergio Uncos - Security Engineer | Analyst</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WDGZL3L2WF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WDGZL3L2WF');
+  </script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Your extracted CSS -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="home-page-background">
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="main-content-wrapper">
+
+    <header class="text-white p-4 fixed w-full top-0 z-50 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold font-mono fade-in-element" style="animation-delay: 0.1s;">Sergio Uncos</h1>
+        <nav id="desktopNav" class="hidden md:block">
+          <ul class="flex space-x-6 font-mono text-sm">
+            <li class="fade-in-element" style="animation-delay: 0.2s;"><a href="index.html" class="active-link transition">Home</a></li>
+            <li class="fade-in-element" style="animation-delay: 0.3s;"><a href="intro.html" class="transition">Intro</a></li>
+            <li class="fade-in-element" style="animation-delay: 0.4s;"><a href="experience.html" class="transition">Experience</a></li>
+            <li class="fade-in-element" style="animation-delay: 0.5s;"><a href="about.html" class="transition">About</a></li>
+            <li class="fade-in-element" style="animation-delay: 0.7s;"><a href="tools.html" class="transition">Tools</a></li>
+            <li class="fade-in-element" style="animation-delay: 0.8s;"><a href="contact.html" class="transition">Contact</a></li>
+          </ul>
+        </nav>
+        <button id="menuBtn" class="md:hidden focus:outline-none text-white fade-in-element" style="animation-delay: 0.2s;" aria-label="Open menu">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+      </div>
+      <nav id="mobileNav" class="hidden md:hidden">
+        <ul class="flex flex-col space-y-4 p-4 font-mono">
+          <li><a href="index.html" class="block active-link">Home</a></li>
+          <li><a href="intro.html" class="block text-white">Intro</a></li>
+          <li><a href="experience.html" class="block text-white">Experience</a></li>
+          <li><a href="about.html" class="block text-white">About</a></li>
+          <li><a href="tools.html" class="block text-white">Tools</a></li>
+          <li><a href="contact.html" class="block text-white">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="pt-24 flex flex-col items-center justify-center text-center p-4">
+      <div class="max-w-3xl w-full">
+        <div class="mb-6 text-green-400 text-4xl font-mono fade-in-element" style="animation-delay: 0.9s;">
+          <span>&gt;</span><span class="animate-pulse">_</span>
+        </div>
+
+        <h1 class="font-mono text-4xl md:text-5xl lg:text-6xl font-bold mb-3 text-gray-100 fade-in-element" style="animation-delay: 1.0s;">
+          <span class="glitch-effect" data-text="Sergio Uncos">Sergio Uncos</span>
+        </h1>
+
+        <h2 class="font-mono text-lg md:text-xl lg:text-2xl text-green-400 mb-8 fade-in-element" style="animation-delay: 1.1s;">
+          Security Engineer | TPRM Specialist
+        </h2>
+
+        <div class="max-w-xl mx-auto mb-10 text-left">
+          <p id="typing-description" class="text-base md:text-lg text-gray-300 leading-relaxed typing-cursor"></p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="w-full py-6 text-center fade-in-element" style="animation-delay: 9.2s;">
+      <p class="text-sm font-mono">
+        &copy; <span id="current-year"></span> Sergio Uncos // Status:
+        <span class="status-online animate-beat">Online</span>
+      </p>
+    </footer>
+    
+
+  </div>
+
+  <!-- Mobile menu toggle & year script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('menuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      if (btn && mobileNav) {
+        btn.addEventListener('click', () => {
+          mobileNav.classList.toggle('hidden');
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+          }
+        });
+      }
+      const currentYearSpan = document.getElementById('current-year');
+      if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+      }
+    });
+  </script>
+
+  <!-- Typing‐effect script (unchanged) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const targetElement = document.getElementById('typing-description');
+      if (targetElement) {
+        const textToType = "> Information Security Professional experienced in Vulnerability Management, Incident Response, Third Party Risk Management and Security Policy Implementation";
+        const initialDelay = 1200;
+        const typingSpeed = 50;
+        targetElement.textContent = '';
+        targetElement.style.borderRight = '.15em solid #34d399';
+        targetElement.style.whiteSpace = 'pre-wrap';
+        targetElement.style.overflow = 'hidden';
+
+        let charIndex = 0;
+        let cursorVisible = true;
+        const blinkInterval = setInterval(() => {
+          targetElement.style.borderRightColor = cursorVisible ? 'transparent' : '#34d399';
+          cursorVisible = !cursorVisible;
+        }, 500);
+
+        function typeChar() {
+          if (charIndex < textToType.length) {
+            targetElement.textContent += textToType.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeChar, typingSpeed);
+          } else {
+            clearInterval(blinkInterval);
+            targetElement.style.borderRightColor = 'transparent';
+          }
+        }
+
+        setTimeout(typeChar, initialDelay);
+      } else {
+        console.error("Typing target element not found");
+      }
+    });
+  </script>
+
+  <!-- Particle effect -->
+  <script src="js/particle-effect.js" defer></script>
+</body>
+</html>

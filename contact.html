@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Sergio Uncos</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* === Base Styles (Keep for Preview) === */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+        .font-mono { font-family: 'Roboto Mono', monospace; }
+
+        /* Canvas and Wrapper Styles */
+        #particle-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; display: block;
+             /* Background handled by external JS or fallback */
+             background-color: #0a0a0a; /* Fallback background */
+        }
+        .main-content-wrapper {
+            position: relative; z-index: 1; min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+        .main-content-wrapper > main { flex-grow: 1; }
+
+        /* === Header Styling === */
+        header {
+            background-color: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(50, 255, 50, 0.1);
+        }
+        header nav a:hover { color: #34d399; }
+        header nav a.active-link { color: #34d399; font-weight: 600; }
+        #mobileNav { background-color: rgba(10, 10, 10, 0.95); }
+        #mobileNav a { color: #cbd5e1; }
+        #mobileNav a:hover { color: #34d399; }
+        #mobileNav a.active-link { color: #34d399; font-weight: 600; }
+
+        /* === Page Title Styling === */
+        .page-title {
+            color: #f0fdf4; text-shadow: 0 0 5px rgba(50, 255, 50, 0.3);
+            letter-spacing: 0.1em;
+        }
+        .intro-paragraph { color: #cbd5e1; line-height: 1.7; }
+
+        /* === Contact Card Specific Styles === */
+        .contact-card-main {
+            background-color: rgba(15, 23, 42, 0.7); /* slate-900 @ 70% */
+            border: 1px solid rgba(50, 255, 50, 0.2); /* Green border */
+            border-radius: 4px;
+            padding: 2rem 2.5rem; /* Adjust padding */
+            box-shadow: 0 0 20px rgba(50, 255, 50, 0.05); /* Optional subtle glow */
+        }
+
+        .contact-icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px; /* Icon size */
+            height: 40px;
+            background-color: rgba(50, 255, 50, 0.1); /* Subtle green background */
+            color: #6ee7b7; /* Icon color */
+            border-radius: 50%; /* Circular */
+            border: 1px solid rgba(50, 255, 50, 0.3);
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        .contact-icon-link:hover {
+            background-color: rgba(50, 255, 50, 0.2);
+            color: #f0fdf4; /* Brighter icon on hover */
+            border-color: rgba(50, 255, 50, 0.5);
+            transform: scale(1.1); /* Slight scale effect */
+            box-shadow: 0 0 10px rgba(50, 255, 50, 0.2);
+        }
+
+        /* === Footer Styling === */
+        footer {
+            background-color: rgba(10, 10, 10, 0.9);
+            border-top: 1px solid rgba(50, 255, 50, 0.1);
+            color: #6b7280;
+            margin-top: auto;
+        }
+
+        /* === Animations === */
+        .fade-in-element {
+            opacity: 0;
+            animation: fadeInAnimation 0.8s ease-out forwards;
+        }
+        @keyframes fadeInAnimation {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- Particle Effect Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="main-content-wrapper">
+
+        <header class="text-white p-4 fixed w-full top-0 z-50 shadow-md fade-in-element">
+             <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-xl font-bold font-mono">Sergio Uncos</h1>
+                <nav id="desktopNav" class="hidden md:block">
+                    <ul class="flex space-x-6 font-mono text-sm">
+                        <li><a href="index.html" class="transition">Home</a></li>
+                        <li><a href="intro.html" class="transition">Intro</a></li>
+                        <li><a href="experience.html" class="transition">Experience</a></li>
+                        <li><a href="about.html" class="transition">About</a></li>
+                        <li><a href="tools.html" class="transition">Tools</a></li>
+                        <li><a href="contact.html" class="active-link transition">Contact</a></li>
+                    </ul>
+                </nav>
+                <button id="menuBtn" class="md:hidden text-white" aria-label="Open menu">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            <nav id="mobileNav" class="hidden md:hidden">
+                 <ul class="flex flex-col space-y-4 p-4 font-mono">
+                     <li><a href="index.html" class="block hover:text-green-400">Home</a></li>
+                     <li><a href="intro.html" class="block hover:text-green-400">Intro</a></li>
+                     <li><a href="experience.html" class="block hover:text-green-400">Experience</a></li>
+                     <li><a href="about.html" class="block hover:text-green-400">About</a></li>
+                     <li><a href="tools.html" class="block hover:text-green-400">Tools</a></li>
+                     <li><a href="contact.html" class="block active-link">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="pt-20 flex items-center justify-center flex-grow">
+            <section id="contact-content" class="w-full max-w-2xl px-6 py-12">
+                <div class="contact-card-main text-center fade-in-element" style="animation-delay: 0.3s;">
+                    <h3 class="font-mono text-3xl font-bold mb-6 page-title">
+                        CONTACT
+                    </h3>
+                    <p class="intro-paragraph mb-4 text-sm md:text-base">
+                        This is where you can get in touch with me! I'm always happy to hear from you, whether you have a question, a comment, or just want to say hello.
+                    </p>
+                    <p class="intro-paragraph mb-8 text-sm md:text-base">
+                        I'm always up for a good conversation. Whether you have a question about my work, want to share your own thoughts and ideas, or just need someone to vent to, I'm here for you. So go ahead and drop me a line! I'm looking forward to hearing from you.
+                    </p>
+
+                    <div class="flex justify-center space-x-5 mt-8">
+                        <a href="https://www.linkedin.com/in/sergiouncos/" target="_blank" rel="noopener noreferrer" class="contact-icon-link" aria-label="LinkedIn Profile">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/sergiouncos" target="_blank" rel="noopener noreferrer" class="contact-icon-link" aria-label="GitHub Profile">
+                            <i class="fab fa-github"></i>
+                        </a>
+                         <a href="mailto:sergio@example.com" class="contact-icon-link" aria-label="Send Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="py-6 text-center fade-in-element" style="animation-delay: 0.7s;">
+             <div class="container mx-auto">
+                <p class="font-mono text-xs">&copy; <span id="current-year"></span> Sergio Uncos. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </div> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Mobile menu toggle ---
+            const menuBtn = document.getElementById('menuBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            if (menuBtn && mobileNav) {
+                menuBtn.addEventListener('click', () => {
+                    mobileNav.classList.toggle('hidden');
+                    const icon = menuBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.toggle('fa-bars');
+                        icon.classList.toggle('fa-times');
+                    }
+                });
+            }
+
+            // --- Set current year ---
+            const currentYearSpan = document.getElementById('current-year');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+             // --- Smooth scrolling (if using # links on other pages) ---
+             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    // Basic check if it's a link on the *same* page
+                    if (window.location.pathname === this.pathname) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href');
+                         try {
+                            const targetElement = document.querySelector(targetId);
+                            if(targetElement) {
+                                targetElement.scrollIntoView({ behavior: 'smooth' });
+                                // Close mobile nav if open
+                                if (mobileNav && !mobileNav.classList.contains('hidden')) {
+                                    mobileNav.classList.add('hidden');
+                                    const icon = menuBtn.querySelector('i');
+                                     if (icon) {
+                                        icon.classList.remove('fa-times');
+                                        icon.classList.add('fa-bars');
+                                     }
+                                }
+                            }
+                         } catch (error) {
+                             console.warn(`Smooth scroll target not found for selector: ${targetId}`);
+                         }
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script src="js/particle-effect.js" defer></script>
+
+</body>
+</html>
